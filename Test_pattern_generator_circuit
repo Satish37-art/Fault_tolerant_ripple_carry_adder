@@ -1,0 +1,34 @@
+
+`timescale 1ns/1ps
+module test_pattern_gen(clr, clk, A,B, c_1,count);
+    input clr,clk;
+    output [4:0]A;
+    output [4:0]B;      
+    output c_1;           
+   output  reg [2:0]count;       
+
+ 
+    always @(posedge clk) begin
+        if (clr)
+            count <= 3'b000;
+        else  
+        count <= count + 1'b1; 
+ end   
+
+  
+    // Instantiate the 3-bit counter
+  //  counter_3bit c1(.clr(clr),.clk(clk), .count(A));
+
+  assign A[0]=((count[1]&count[2])|(~count[0]&count[1])|(~count[0]&count[2]));
+  assign B[0]=((~count[1]&count[2])|(count[2]&count[0])|(~count[1]&count[0]));
+  assign A[1]=count[1];
+  assign B[1]=count[0];
+  assign c_1=((count[2]&count[0])|(count[2]&count[1])|(count[1]&count[0]));
+  assign A[3]=A[1];
+  assign B[3]=B[1];
+  assign A[2]=A[0];
+ assign  B[2]=B[0];
+ assign A[4]=A[2];
+ assign B[4]=B[2];
+  
+endmodule
