@@ -1,0 +1,11 @@
+module register(reg_out,reg_in,clk,clr);
+input [7:0]reg_in;
+input clk,clr;
+output reg [7:0]reg_out;
+
+always@(posedge clk)
+if(clr) reg_out<=8'b00000000;
+else 
+      reg_out<=reg_in;
+
+endmodule
