@@ -1,0 +1,92 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 08.06.2025 15:30:54
+// Design Name: 
+// Module Name: fault_tolerant_rca
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module fault_tolerant_rca(S,cy,sum,cout,a,b,is,os,cs,test,TA,TB,TC_1 );
+input [3:0]a,b;
+output [3:0] sum;
+output cout;
+input [2:0]is;
+input [3:0]os;
+input [4:0]cs;
+input test;
+input [4:0]TA,TB;
+input TC_1;
+
+wire g0,g1,g2,g3,g4;
+wire w1,w2,w3,w4,w5,w6;
+wire [4:0]A,B;
+
+
+output [4:0]S;//exposed to  output
+output [5:1]cy;//exposed to output
+wire t0,t1,t2,t3,t4;
+
+
+
+
+//input select muxex
+mux_2to1 inm0 (w2,b[1],b[0],is[0]);
+mux_2to1 inm1 (w1,a[1],a[0],is[0]);
+mux_2to1 inm2 (w4,b[2],b[1],is[1]);
+mux_2to1 inm3 (w3,a[2],a[1],is[1]);
+mux_2to1 inm4 (w6,b[3],b[2],is[2]);
+mux_2to1 inm5 (w5,a[3],a[2],is[2]);
+
+//test signl & data muxes
+
+mux_2to1 test0(t0,0,TC_1,test);
+mux_2to1 test1(A[0],a[0],TA[0],test);
+mux_2to1 test2(B[0],b[0],TB[0],test);
+mux_2to1 test3(A[1],w1,TA[1],test);
+mux_2to1 test4(B[1],w2,TB[1],test);
+mux_2to1 test5(A[2],w3,TA[2],test);
+mux_2to1 test6(B[2],w4,TB[2],test);
+mux_2to1 test7(A[3],w5,TA[3],test);
+mux_2to1 test8(B[3],w6,TB[3],test);
+mux_2to1 test9(A[4],a[3],TA[4],test);
+mux_2to1 test10(B[4],b[3],TB[4],test);
+
+// and gate selection for the carry select mux
+assign g0=(cs[0]); //(test)&
+assign g1= (cs[1]); //test)&
+assign g2=(cs[2]); //(test)&
+assign g3=(cs[3]); //(test)&
+assign g4= (cs[4]); //test)&
+ 
+fa f0 (S[0],cy[1],A[0],B[0],t0);
+fa f1 (S[1],cy[2],A[1],B[1],t1);
+fa f2 (S[2],cy[3],A[2],B[2],t2);
+fa f3 (S[3],cy[4],A[3],B[3],t3);
+fa f4 (S[4],cy[5],A[4],B[4],t4);
+//carry select muxes
+mux_2to1 cs0(t1,cy[1],t0,g0);
+mux_2to1 cs1(t2,cy[2],cy[1],g1);
+mux_2to1 cs2(t3,cy[3],cy[2],g2);
+mux_2to1 cs3(t4,cy[4],cy[3],g3);
+mux_2to1 cs4(cout,cy[4],cy[5],g4);
+// output select muxes
+mux_2to1 os0(sum[0],S[0],S[1],os[0]);
+mux_2to1 os1(sum[1],S[1],S[2],os[1]);
+mux_2to1 os2(sum[2],S[2],S[3],os[2]);
+mux_2to1 os3(sum[3],S[3],S[4],os[3]);
+   
+endmodule
