@@ -1,0 +1,21 @@
+module lut (test,count,lut_out);
+input [2:0] count;
+input test;
+ 
+output reg [3:0] lut_out;
+ always @(*)begin
+ if(test)begin
+ case(count)
+3'b000:  lut_out=4'b0000;
+3'b001:  lut_out=4'b1010;
+3'b010:  lut_out=4'b1010;
+3'b011:  lut_out=4'b0110;
+3'b100:  lut_out=4'b1001;
+3'b101:  lut_out=4'b0101;
+3'b110:  lut_out=4'b0101;
+3'b111:  lut_out=4'b1111;
+// default: lut_out=4'b0000;
+endcase 
+ end
+ end
+endmodule
