@@ -1,0 +1,15 @@
+module comparator (out_fa,comp_out,lut_out);
+input [7:0]out_fa;
+output [7:0]comp_out;
+input [3:0]lut_out;
+
+assign comp_out[0]= (lut_out[0])^(out_fa[0]);
+assign comp_out[1]= (lut_out[1])^(out_fa[1]);
+assign comp_out[2]= (lut_out[2])^(out_fa[2]);
+assign comp_out[3]= (lut_out[3])^(out_fa[3]);
+assign comp_out[4]= (lut_out[0])^(out_fa[4]);
+assign comp_out[5]= (lut_out[1])^(out_fa[5]);
+assign comp_out[6]= (lut_out[2])^(out_fa[6]);
+assign comp_out[7]= (lut_out[3])^(out_fa[7]);
+
+endmodule
