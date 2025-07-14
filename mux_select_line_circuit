@@ -1,0 +1,73 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 18.06.2025 10:44:35
+// Design Name: 
+// Module Name: mux_select_line_ckt
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+//module mux_select_line_ckt(
+
+//    );
+//endmodule
+
+module  mux_select_line_ckt (test,count,out_fa,clk,clr,cs,is,os); 
+input [7:0]out_fa;
+input clk,clr;
+input [2:0]count;
+input test;
+output [4:0]cs;
+output [3:0]os;
+output [2:0]is;
+wire [3:0]lut_out;
+wire [7:0]comp_out;
+wire [7:0]w;
+wire [7:0]reg_out;
+wire t1,t2,t3;
+wire [3:0]S,C;
+assign S={out_fa[7],out_fa[5],out_fa[3],out_fa[1]};
+assign C={out_fa[6],out_fa[4],out_fa[2],out_fa[0]};
+
+
+lut e1(.test(test),.count(count),.lut_out(lut_out));
+comparator e2(.out_fa(out_fa),.lut_out(lut_out),.comp_out(comp_out));
+or_8bit e3(.a(comp_out),.b(reg_out),.or_out(w));
+register e4(.clr(clr),.clk(clk),.reg_in(w),.reg_out(reg_out));
+
+
+//input and output select signal generation 
+assign cs[0]=(reg_out[0]|reg_out[1]);
+assign is[0]=cs[0];
+assign os[0]=is[0];
+assign t1= (reg_out[2]|reg_out[3]);
+assign is[1]= (t1|cs[0]);
+assign os[1]= is[1];
+assign t2=(reg_out[4]|reg_out[5]);
+assign is[2]=(t2|is[1]);
+assign os[2]=is[2];
+assign t3=(reg_out[6]|reg_out[7]);
+assign os[3]=(t3|is[2]);
+//carry select signal generation
+assign cs[1]=((~cs[0])&t1);
+assign cs[2]=(~t1&t2);
+assign cs[3]=(~t2&t3);
+assign cs[4]=((~t3)&(~t2)&(~t1)&(~cs[0]));
+
+ endmodule
+ 
+ 
+ 
