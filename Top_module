@@ -1,0 +1,53 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 21.06.2025 19:17:16
+// Design Name: 
+// Module Name: top_module_rca
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module top_module_rca (a,b,test,clr,clk,sum,cout);
+input [3:0]a,b;
+input test,clr,clk;
+
+output [3:0]sum;
+output cout;
+
+wire [4:0]TA,TB;
+wire TC_1;
+wire [4:0]cs;
+wire [2:0]is;
+wire [3:0]os;
+wire [4:0]S;
+wire [5:1]cy;
+wire [7:0]out_fa;
+wire [2:0]count;
+assign out_fa[0]= cy[1];
+assign out_fa[1]=S[0];
+assign out_fa[2]=cy[2];
+assign out_fa[3]=S[1];
+assign out_fa[4]=cy[3];
+assign out_fa[5]=S[2];
+assign out_fa[6]=cy[4];
+assign out_fa[7]=S[3];
+
+test_pattern_gen e1 (.count(count),.clr(clr),.clk(clk),.A(TA),.B(TB),.c_1(TC_1));
+mux_select_line_ckt e2 (.out_fa(out_fa),.test(test)
+,.count(count),.clk(clk),.clr(clr),.is(is),.cs(cs),.os(os));
+fault_tolerant_rca e3(.S(S),.cy(cy),.sum(sum),.cout(cout),.a(a),.b(b),.is(is),.os(os),.cs(cs),.test(test),.TA(TA),.TB(TB),.TC_1(TC_1));
+
+endmodule
